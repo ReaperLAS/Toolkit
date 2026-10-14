@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>body{margin:0}</style></head><body>
 <title>Toolkit</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@500;700;800&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -452,10 +453,20 @@ $$('[data-ico]').forEach(e=>e.innerHTML=ICONS[e.dataset.ico]||'');
 let DL=null;
 try{window.claude&&claude.use&&claude.use('downloads').then(d=>{DL=d}).catch(()=>{})}catch(e){}
 async function saveFile(name,data,label){
-  if(!DL){await new Promise(r=>setTimeout(r,500))}
-  if(!DL){toast('Saving files is not available in this view. Try the copy buttons.');return false}
-  try{await DL.save({filename:name,data});toast('Saved '+name);logAct(label||'Saved',name);return true}
-  catch(e){toast(e&&e.code==='declined'?'Save cancelled':'Could not save: '+((e&&e.message)||'try again'));return false}
+  const hosted=typeof window.claude!=='undefined';
+  if(hosted&&!DL){await new Promise(r=>setTimeout(r,500))}
+  if(DL){
+    try{await DL.save({filename:name,data});toast('Saved '+name);logAct(label||'Saved',name);return true}
+    catch(e){toast(e&&e.code==='declined'?'Save cancelled':'Could not save: '+((e&&e.message)||'try again'));return false}
+  }
+  if(hosted){toast('Saving files is not available in this view. Try the copy buttons.');return false}
+  try{
+    const blob=data instanceof Blob?data:new Blob([data],{type:'application/octet-stream'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),4000);
+    toast('Saved '+name);logAct(label||'Saved',name);return true;
+  }catch(e){toast('Could not save: '+e.message);return false}
 }
 async function copyText(t,msg){
   try{await navigator.clipboard.writeText(t);toast(msg||'Copied')}

@@ -43,6 +43,7 @@ Students, office workers and teams juggle five or six different apps for everyda
 - Light and dark themes that follow your system or the toggle.
 - Works on phone width as well as desktop.
 - Notes autosave to your library and reopen where you stopped.
+- Files save as normal browser downloads.
 
 ## Privacy
 
@@ -50,7 +51,7 @@ Everything runs in the browser. Files you open are read locally and are **not up
 
 ## Running it
 
-Toolkit is a single file, `Toolkit.html`. Open it in a modern browser (Chrome, Edge, Firefox, Safari). It loads three libraries from cdnjs, so an internet connection is needed the first time:
+Toolkit is a single file, `Toolkit.html`. Download it and open it, or use the GitHub Pages site if enabled for this repo. Open it in a modern browser (Chrome, Edge, Firefox, Safari). It loads three libraries from cdnjs, so an internet connection is needed the first time:
 
 | Library | Used for |
 |---|---|
@@ -62,7 +63,6 @@ Fonts: Schibsted Grotesk, IBM Plex Sans and IBM Plex Mono from Google Fonts.
 
 ## Known limits (v1)
 
-- **Saving files.** Saves go through the host page's `downloads` capability, as built for Claude Artifacts. Opened as a plain local file or on GitHub Pages, the save buttons show a "not available" message until a standard download fallback is added. Copy buttons work everywhere.
 - **PDF text export is Latin only.** Notes exported to PDF use standard PDF fonts, so Arabic and other scripts do not render correctly yet. Word, text, Markdown and HTML export are fine.
 - **No editing inside existing PDFs.** You can reorganise, rotate, number and stamp pages, but not change or highlight the text of an existing PDF.
 - **Scans come from uploaded photos.** There is no live camera capture.
@@ -70,7 +70,6 @@ Fonts: Schibsted Grotesk, IBM Plex Sans and IBM Plex Mono from Google Fonts.
 
 ## Roadmap
 
-- [ ] Standard browser download fallback so saving works anywhere
 - [ ] Arabic and full Unicode PDF export
 - [ ] Highlight and annotate inside existing PDFs
 - [ ] OCR so scanned pages become searchable text
@@ -83,6 +82,7 @@ Fonts: Schibsted Grotesk, IBM Plex Sans and IBM Plex Mono from Google Fonts.
 ```
 Toolkit/
 ├── Toolkit.html   # the whole app: markup, styles and scripts
+├── index.html     # redirects to Toolkit.html (for GitHub Pages)
 └── README.md
 ```
 
